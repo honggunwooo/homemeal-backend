@@ -1,12 +1,15 @@
-# ===== Build 폴더 무시 해제 =====
+# ===== build 폴더만 예외로 올림 =====
 !build/
+!build/**
 
-# === Gradle ===
+# ===== Gradle =====
 .gradle
-/build/           # 원래는 무시하지만, 위에서 예외로 풀었음
-!build/
 
-# === Eclipse/STS ===
+# ===== 빌드 결과(원래는 무시) =====
+build/
+
+# ===== IDEs =====
+# STS, Eclipse
 .apt_generated
 .classpath
 .factorypath
@@ -18,7 +21,7 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
-# === IntelliJ IDEA ===
+# IntelliJ
 .idea
 *.iws
 *.iml
@@ -27,23 +30,18 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
-# === NetBeans ===
+# NetBeans
 /nbproject/private/
 /nbbuild/
 /dist/
 /nbdist/
 /.nb-gradle/
 
-# === VS Code ===
+# VS Code
 .vscode/
 
-# === 기타 환경/OS/에디터 임시파일 ===
+# 기타 OS/환경
 .DS_Store
 Thumbs.db
 
-# === 빌드 산출물 무시 (build/는 예외) ===
-!build/
-!build/**
-
-# === 테스트, 예시 파일 등 추가 무시 ===
 HELP.md
