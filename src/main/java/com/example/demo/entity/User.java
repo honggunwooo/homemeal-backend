@@ -3,6 +3,7 @@ package com.example.demo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Builder
 @Entity
 @Data
 @NoArgsConstructor
@@ -18,4 +19,5 @@ public class User {
     private String nickname;
     private String region;
     private String role;
+
 }
