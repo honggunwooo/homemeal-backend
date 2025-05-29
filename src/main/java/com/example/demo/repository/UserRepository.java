@@ -1,9 +1,9 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.User;
+import com.example.demo.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<User, Long> {
-    // (선택) username으로 회원 찾는 메서드
-    User findByUsername(String username);
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
+    // Optional로 반환!
+    UserEntity findByUsername(String username);
 }

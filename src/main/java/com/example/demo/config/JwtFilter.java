@@ -1,5 +1,7 @@
 package com.example.demo.config;
 
+import com.example.demo.entity.UserEntity;
+import com.example.demo.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -7,29 +9,29 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
+import java.util.List;
 
 @Component
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
+    private final UserService userService;
 
-    // JwtUtil은 @Component이므로 Spring이 자동 주입해줌
-    public JwtFilter(JwtUtil jwtUtil) {
+    public JwtFilter(JwtUtil jwtUtil, UserService userService) {
         this.jwtUtil = jwtUtil;
+        this.userService = userService;
     }
 
-    // 특정 경로는 JWT 필터링을 제외함 (회원가입, 로그인)
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String path = request.getRequestURI();
-        // ↓ 필요에 따라 경로 추가 가능
         return path.equals("/api/auth/signup") || path.equals("/api/auth/login");
     }
 
@@ -47,9 +49,14 @@ public class JwtFilter extends OncePerRequestFilter {
                 Claims claims = jwtUtil.parseToken(token);
                 String username = claims.getSubject();
 
-                // Spring Security 인증 객체 등록
+                // ⭐️ UserService에서 User 객체 가져와서 principal로 등록
+                UserEntity userEntity = userService.findByUsername(username);
+
+                List<SimpleGrantedAuthority> authorities =
+                        List.of(new SimpleGrantedAuthority("ROLE_USER"));
+
                 UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
+                        new UsernamePasswordAuthenticationToken(userEntity, null, authorities);
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 

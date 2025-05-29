@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-import com.example.demo.entity.User;
+import com.example.demo.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,8 +18,8 @@ public class AuthDto {
         private String region;
         private String role;
 
-        public User toUser() {
-            return User.builder()
+        public UserEntity toUser() {
+            return UserEntity.builder()
                     .username(username)
                     .password(password)
                     .nickname(nickname)
